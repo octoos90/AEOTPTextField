@@ -33,6 +33,10 @@ public class AEOTPTextField: UITextField {
     public var otpFontSize: CGFloat = 14
     /// The default font of the text
     public var otpFont: UIFont = UIFont.systemFont(ofSize: 14)
+    /// The default keyboard type
+    public var otpKeyboardType: UIKeyboardType = .numberPad
+    /// The default allowing input
+    public var otpAllowingInput: CharSetType = .AlphaNumeric
     /// The delegate of the AEOTPTextFieldDelegate protocol
     public weak var otpDelegate: AEOTPTextFieldDelegate?
 
@@ -68,6 +72,7 @@ public class AEOTPTextField: UITextField {
     /// Use this func if you need to clear the `OTP` text and reset the `AEOTPTextField` to the default state
     public func clearOTP() {
         text = nil
+        otpDelegate?.counterText(0)
         digitLabels.forEach { currentLabel in
             currentLabel.text = otpDefaultCharacter
             currentLabel.layer.borderWidth = otpDefaultBorderWidth
@@ -92,7 +97,7 @@ private extension AEOTPTextField {
     func configureTextField() {
         tintColor = .clear
         textColor = .clear
-        keyboardType = .numberPad
+        keyboardType = otpKeyboardType
         textContentType = .oneTimeCode
         borderStyle = .none
         addTarget(self, action: #selector(textDidChange), for: .editingChanged)
@@ -137,7 +142,7 @@ private extension AEOTPTextField {
             let currentLabel = digitLabels[labelIndex]
             if labelIndex < text.count {
                 let index = text.index(text.startIndex, offsetBy: labelIndex)
-                currentLabel.text = isSecureTextEntry ? "✱" : String(text[index])
+                currentLabel.text = isSecureTextEntry ? "✱" : String(text[index].uppercased())
                 currentLabel.layer.borderWidth = otpFilledBorderWidth
                 currentLabel.layer.borderColor = otpFilledBorderColor.cgColor
                 currentLabel.backgroundColor = otpFilledBackgroundColor
@@ -147,6 +152,7 @@ private extension AEOTPTextField {
                 currentLabel.layer.borderColor = otpDefaultBorderColor.cgColor
                 currentLabel.backgroundColor = otpBackgroundColor
             }
+            otpDelegate?.counterText(text.count)
         }
         
         if text.count == digitLabels.count {
@@ -160,5 +166,9 @@ private extension AEOTPTextField {
 extension AEOTPTextField: AEOTPTextFieldImplementationProtocol {
     var digitalLabelsCount: Int {
         digitLabels.count
+    }
+    
+    var allowingInput: CharSetType {
+        otpAllowingInput
     }
 }

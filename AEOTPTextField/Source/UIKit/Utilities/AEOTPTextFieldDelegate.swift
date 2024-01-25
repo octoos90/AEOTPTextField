@@ -7,4 +7,5 @@
 
 public protocol AEOTPTextFieldDelegate: AnyObject {
     func didUserFinishEnter(the code: String)
+    func counterText(_ count: Int)
 }
