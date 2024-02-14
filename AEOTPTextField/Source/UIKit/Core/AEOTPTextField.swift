@@ -74,6 +74,7 @@ public class AEOTPTextField: UITextField {
         text = nil
         otpDelegate?.counterText(0)
         digitLabels.forEach { currentLabel in
+            currentLabel.semanticContentAttribute = .forceLeftToRight
             currentLabel.text = otpDefaultCharacter
             currentLabel.layer.borderWidth = otpDefaultBorderWidth
             currentLabel.layer.borderColor = otpDefaultBorderColor.cgColor
@@ -95,6 +96,7 @@ public class AEOTPTextField: UITextField {
 //
 private extension AEOTPTextField {
     func configureTextField() {
+        semanticContentAttribute = .forceLeftToRight
         tintColor = .clear
         textColor = .clear
         keyboardType = otpKeyboardType
@@ -107,6 +109,7 @@ private extension AEOTPTextField {
     
     func createLabelsStackView(with count: Int) -> UIStackView {
         let stackView = UIStackView()
+        stackView.semanticContentAttribute = .forceLeftToRight
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.alignment = .fill
@@ -122,6 +125,7 @@ private extension AEOTPTextField {
     
     func createLabel() -> UILabel {
         let label = UILabel()
+        label.semanticContentAttribute = .forceLeftToRight
         label.backgroundColor = otpBackgroundColor
         label.layer.cornerRadius = otpCornerRaduis
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -142,11 +146,13 @@ private extension AEOTPTextField {
             let currentLabel = digitLabels[labelIndex]
             if labelIndex < text.count {
                 let index = text.index(text.startIndex, offsetBy: labelIndex)
+                currentLabel.semanticContentAttribute = .forceLeftToRight
                 currentLabel.text = isSecureTextEntry ? "✱" : String(text[index].uppercased())
                 currentLabel.layer.borderWidth = otpFilledBorderWidth
                 currentLabel.layer.borderColor = otpFilledBorderColor.cgColor
                 currentLabel.backgroundColor = otpFilledBackgroundColor
             } else {
+                currentLabel.semanticContentAttribute = .forceLeftToRight
                 currentLabel.text = otpDefaultCharacter
                 currentLabel.layer.borderWidth = otpDefaultBorderWidth
                 currentLabel.layer.borderColor = otpDefaultBorderColor.cgColor
